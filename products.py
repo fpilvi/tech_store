@@ -1,4 +1,6 @@
 class Product:
+    """product class."""
+
     def __init__(self, name, price, quantity):
         if not name or price < 0 or quantity < 0:
             raise ValueError("Invalid input for product.")
