@@ -1,61 +1,37 @@
+class Product:
+    def __init__(self, name, price, quantity):
+        if not name or price < 0 or quantity < 0:
+            raise ValueError("Invalid input for product.")
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+        self.active = True
 
-def display_menu():
-    print("Store Menu\n----------")
-    print("1. List all products in store")
-    print("2. Show total amount in store")
-    print("3. Make an order")
-    print("4. Quit")
-    choice = input("Please choose a number: ")
-    return choice
+    def get_quantity(self):
+        return self.quantity
 
-products = [
-    {"name": "Laptop", "quantity": 10, "price": 1200},
-    {"name": "Smartphone", "quantity": 15, "price": 800},
-    {"name": "Tablet", "quantity": 20, "price": 300},
-]
+    def set_quantity(self, quantity):
+        self.quantity = quantity
+        if self.quantity == 0:
+            self.deactivate()
 
-def list_products():
-    print("\nAvailable Products:")
-    for product in products:
-        print(f"{product['name']} - ${product['price']} ({product['quantity']} available)")
-print()
+    def is_active(self):
+        return self.active
 
+    def activate(self):
+        self.active = True
 
-def show_total_amount():
-    total = sum(product['quantity'] for product in products)
-    print(f"\nTotal products in store: {total}\n")
+    def deactivate(self):
+        self.active = False
 
+    def show(self):
+        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
 
-def make_order():
-    order_product = input("Enter the product name you want to order: ")
-    order_quantity = int(input("Enter the quantity: "))
-    for product in products:
-        if product["name"].lower() == order_product.lower():
-            if product["quantity"] >= order_quantity:
-                product["quantity"] -= order_quantity
-                print(f"Order successful! {order_quantity} {product['name']} ordered.\n")
-            else:
-                print(f"Sorry, only {product['quantity']} available.\n")
-            return
-
-    print("Product not found in store.\n")
-
-
-def main():
-    while True:
-        choice = display_menu()
-        if choice == "1":
-            list_products()
-        elif choice == "2":
-            show_total_amount()
-        elif choice == "3":
-            make_order()
-        elif choice == "4":
-            print("Goodbye!")
-            break
-        else:
-            print("Invalid option. Please try again.\n")
-
-
-if __name__ == "__main__":
-    main()
+    def buy(self, quantity):
+        if quantity > self.quantity:
+            raise Exception("Not enough stock available.")
+        total_price = quantity * self.price
+        self.quantity -= quantity
+        if self.quantity == 0:
+            self.deactivate()
+        return total_price
